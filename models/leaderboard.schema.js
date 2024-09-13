@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const leaderboardSchema=mongoose.Schema({
+const leaderboardSchema=new mongoose.Schema({
     compId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Competition",
@@ -23,4 +23,4 @@ const leaderboardSchema=mongoose.Schema({
     }
 },{timestamps:true})
 
-export const Leaderboard=mongoose.model("Leaderboard",leaderboardSchema)
+export const Leaderboard=mongoose.models.Leaderboard||mongoose.model("Leaderboard",leaderboardSchema)

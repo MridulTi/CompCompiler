@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 
-const challengeSchema=mongoose.Schema({
+const challengeSchema=new mongoose.Schema({
     slug:{
         type:String,
+        unique:true,
         required:true
     },
     difficulty:{
@@ -40,4 +41,5 @@ const challengeSchema=mongoose.Schema({
 
 },{timestamps:true})
 
-export const Challenge=mongoose.model("Challenge",challengeSchema)
+const Challenge=mongoose.models.Challenge||mongoose.model("Challenge",challengeSchema)
+export default Challenge

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const prizeSchema=mongoose.Schema({
+const prizeSchema=new mongoose.Schema({
     firstPlace:{
         type:String,
         required:true
@@ -55,4 +55,4 @@ const compSchema=mongoose.Schema({
 
 },{timestamps:true})
 
-export const Competition=mongoose.model("Competition",compSchema)
+export const Competition=mongoose.models.Competition||mongoose.model("Competition",compSchema)
