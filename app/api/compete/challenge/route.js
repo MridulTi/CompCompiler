@@ -30,7 +30,7 @@ export const PATCH=async(req,res)=>{
         }
         const updatedChallenge = await Challenge.findOneAndUpdate(
             { slug: slug },
-            { $set: { ...(title && { title }), ...(problemStatement && { problemStatement }), ...(examples&&{examples}), ...(input&&{input}),...(output&&{output}),...Challenge(testcase&&{testcase}),...Challenge(keywords&&{keywords}),...Challenge(hints&&{hints}) } }
+            { $set: { ...(title && { title }), ...(problemStatement && { problemStatement }), ...(examples&&{examples}), ...(input&&{input}),...(output&&{output}),...(testcase&&{testcase}),...(keywords&&{keywords}),...(hints&&{hints}) } }
         );
 
         if(!updatedChallenge){
@@ -50,7 +50,7 @@ export const DELETE=async(req,res)=>{
         if (!slug){
             return new NextResponse("Slug not found"+error.message,{status:400})
         }
-        const updatedChallenge = await Challenge.deleteOne({ slug: slug },);
+        const updatedChallenge = await Challenge.deleteOne({ slug: slug });
 
         if(!updatedChallenge){
             return  new NextResponse("Challenge can't ne Deleted.", {status:400})

@@ -10,7 +10,7 @@ const prizeSchema=new mongoose.Schema({
 })
 export const Prize=mongoose.model("Prize",prizeSchema)
 
-const compSchema=mongoose.Schema({
+const compSchema=new mongoose.Schema({
     slug:{
         type:String,
         unique:true,
