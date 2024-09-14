@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {hash,compare} from 'bcrypt'
+import { hash, compare } from "bcrypt";
 const userSchemas = new mongoose.Schema(
   {
     email: {
@@ -28,31 +28,40 @@ const userSchemas = new mongoose.Schema(
   },
   { timestamps: true }
 );
-userSchemas.pre("save",async function(next){
-  console.log("Fgdfgd")
-  if(!this.isModified("password")) return next();
+userSchemas.pre("save", async function (next) {
+  console.log("Pre save hook triggered");
+  if (!this.isModified("password")) {
+    console.log("Password not modified");
+    return next();
+  }
 
-  this.password=await hash(this.password,10);
-  next()
-})
+  try {
+    console.log("Hashing password");
+    this.password = await hash(this.password, 10);
+    next();
+  } catch (error) {
+    console.error("Error hashing password:", error);
+    next(error);
+  }
+});
 
-userSchemas.methods.isPasswordCorrect=async function(password){
-  console.log(password)
-  return await compare(password,this.password)
-}
-userSchemas.methods.generateAccessToken=async function(){
+userSchemas.methods.isPasswordCorrect = async function (password) {
+  console.log(password);
+  return await compare(password, this.password);
+};
+userSchemas.methods.generateAccessToken = async function () {
   return await jwt.sign(
-      {
-          _id:this._id,
-          email:this.email,
-          username:this.username,
-      },
-      process.env.ACCESS_TOKEN_SECRET,
-      {
-          expiresIn:process.env.ACCESS_TOKEN_EXPIRY
-      }
-  )
-}
+    {
+      _id: this._id,
+      email: this.email,
+      username: this.username,
+    },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+    }
+  );
+};
 
 const User = mongoose.models.User || mongoose.model("User", userSchemas);
 
