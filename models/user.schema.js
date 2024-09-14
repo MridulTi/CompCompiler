@@ -17,10 +17,10 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      match: [
-        /^(?=.*?[0-9])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^0-9A-Za-z]).{8,32}$/,
-        "Password must contain one number,atleast one uppercase and one lowercase letters and one special character, with length of between 8 to 32 long",
-      ],
+      // match: [
+      //   /^(?=.*?[0-9])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^0-9A-Za-z]).{8,32}$/,
+      //   "Password must contain one number,atleast one uppercase and one lowercase letters and one special character, with length of between 8 to 32 long",
+      // ],
     },
     image: {
       type: String,
