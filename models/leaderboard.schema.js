@@ -17,7 +17,7 @@ const leaderboardSchema=new mongoose.Schema({
             required:true,
         }
     ],
-    timecomplexity:{
+    timetaken:{
         type:String,
         required:true
     }
