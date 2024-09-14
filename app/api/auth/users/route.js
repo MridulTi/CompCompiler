@@ -101,7 +101,7 @@ export const POST = async (req) => {
 // Updating User details
 export const PATCH = async (req) => {
   try {
-    await verifyJWT(req);
+    const userId=await verifyJWT(req);
     const body = await req.body;
     const { email, username, password, image } = body;
 
@@ -138,7 +138,7 @@ export const PATCH = async (req) => {
 // Deleting specific user by Id
 export const DELETE = async (req) => {
   try {
-    await verifyJWT(req);
+    const userId=await verifyJWT(req);
     const { id } = req.params;
     const user = await User.findByIdAndDelete({ id });
 
