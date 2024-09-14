@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-
-const userSchema = new mongoose.Schema(
+import {hash,compare} from 'bcrypt'
+const userSchemas = new mongoose.Schema(
   {
     email: {
       type: String,
@@ -17,10 +17,10 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      // match: [
-      //   /^(?=.*?[0-9])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^0-9A-Za-z]).{8,32}$/,
-      //   "Password must contain one number,atleast one uppercase and one lowercase letters and one special character, with length of between 8 to 32 long",
-      // ],
+      match: [
+        /^(?=.*?[0-9])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^0-9A-Za-z]).{8,32}$/,
+        "Password must contain one number,atleast one uppercase and one lowercase letters and one special character, with length of between 8 to 32 long",
+      ],
     },
     image: {
       type: String,
@@ -28,7 +28,32 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+userSchemas.pre("save",async function(next){
+  console.log("Fgdfgd")
+  if(!this.isModified("password")) return next();
 
-const User = mongoose.models.User || mongoose.model("User", userSchema);
+  this.password=await hash(this.password,10);
+  next()
+})
+
+userSchemas.methods.isPasswordCorrect=async function(password){
+  console.log(password)
+  return await compare(password,this.password)
+}
+userSchemas.methods.generateAccessToken=async function(){
+  return await jwt.sign(
+      {
+          _id:this._id,
+          email:this.email,
+          username:this.username,
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+          expiresIn:process.env.ACCESS_TOKEN_EXPIRY
+      }
+  )
+}
+
+const User = mongoose.models.User || mongoose.model("User", userSchemas);
 
 export default User;

@@ -3,7 +3,25 @@ import { connectToDB } from "@utils/database";
 import { NextResponse } from "next/server";
 import { sign } from "jsonwebtoken";
 import { hash, compare } from "bcrypt";
+import { cookies } from "next/headers";
 
+const generateAccessAndRefreshTokens = async (userId) => {
+    try {
+      const user = await User.findById(userId);
+      const accessToken = await user.generateAccessToken();
+  
+      await user.save({ validateBeforeSave: false });
+  
+      return {
+        accessToken,
+      };
+    } catch (error) {
+      throw new ApiError(
+        500,
+        "Something went wrong while generating Refresh and Access Token"
+      );
+    }
+  };
 export const GET = async () => {
   try {
     await connectToDB();
@@ -23,36 +41,21 @@ export const GET = async () => {
 export const POST = async (req) => {
   const { searchParams } = new URL(req.url);
   const action = searchParams.get("action");
-  console.log(action);
   if (action === "register") {
     try {
       const { email, username, password } = await req.json();
       console.log(email);
 
-      // Check if the user already exists
       let user = await User.findOne({ email });
       if (user) {
         return new NextResponse("User already exists" + error.message, {
           status: 500,
         });
       }
-
-      // Hash the password
-      const hashpassword = await hash(password, 10);
-      const newUser = new User({ email, username, password: hashpassword });
+      const newUser = new User({ email:email?.toLowerCase(), username, password });
       await newUser.save();
 
-      // Create a JWT token
-      const token = sign(
-        { userId: newUser._id },
-        process.env.JWT_SECRET, // Use environment variable
-        { expiresIn: "3600" }
-      );
-
-      return new NextResponse(
-        JSON.stringify({ message: "User is created", token }),
-        { status: 200 }
-      );
+      return new NextResponse(JSON.stringify({ message: "User is created",data:newUser }),{ status: 200 });
     } catch (error) {
       return new NextResponse("Error Registering user" + error.message, {
         status: 500,
@@ -61,27 +64,29 @@ export const POST = async (req) => {
   } else if (action === "login") {
     try {
       const { email, password } = await req.json();
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ email:email.toLowerCase() });
+
       if (!user) {
         return new NextResponse(
           JSON.stringify({ message: "Can't find the said user" }),
           { status: 400 }
         );
       }
-      // Check if the password is correct
-      const isValidPassword = await compare(password, user.password);
+      const isValidPassword = await user.isPasswordCorrect(password);
       if (!isValidPassword) {
         return new NextResponse(
           JSON.stringify({ message: "Incorrect password" }),
           { status: 400 }
         );
       }
-      // Create a JWT token
-      const token = sign(
-        { userId: user._id },
-        process.env.JWT_SECRET, // Use environment variable
-        { expiresIn: "3600" }
-      );
+      const { accessToken } = await generateAccessAndRefreshTokens(
+        user._id
+        );
+        const options = {
+            httpOnly: true,
+            secure: true,
+        };
+        cookies().set("accessToken", accessToken, options)
       return new NextResponse(
         JSON.stringify({ message: "User is logged in", token }),
         { status: 200 }
