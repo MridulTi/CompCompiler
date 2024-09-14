@@ -1,7 +1,9 @@
 import { Competition } from "@models/competition.schema";
+import { verifyJWT } from "@utils/verifyjwt";
 import { NextResponse } from "next/server"
 
 export const GET=async(req,res)=>{
+    const userId=await verifyJWT(req);
     try {
         const {slug}=await req.body;
         
@@ -17,13 +19,14 @@ export const GET=async(req,res)=>{
     }
 }
 export const POST=async(req)=>{
+    const userId=await verifyJWT(req)
     try {
         const {slug}=await req.body;
     
         if(!slug) return new NextResponse("Competititon Slug not defined",{status:400});
         
         const updatedCompetition=await Competition.findOneAndUpdate({slug:slug},
-            {$push:{participants:req.user._id}}
+            {$push:{participants:userId}}
         )
         if (!updatedCompetition)return new NextResponse("Couldn't set participatnt",{status:400});
     

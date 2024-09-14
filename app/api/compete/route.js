@@ -1,18 +1,22 @@
 import { Competition } from "@models/competition.schema"
+import { verifyJWT } from "@utils/verifyjwt";
 import { NextResponse } from "next/server"
 
+
 export const GET=async(req,res)=>{
+    const userId=await verifyJWT(req);
     try {
         const allCompetition=await Competition.find()
         console.log(allCompetition)
         if (!allCompetition) return new NextResponse("Error occured while fetching compettion"+error.message,{status:400})
-        return new NextResponse(JSON.stringify({message:"Fetched Relevant Competition",data:allCompetition}),{status:500})
+        return new NextResponse(JSON.stringify({message:"Fetched Relevant Competition",data:allCompetition}),{status:200})
 
     } catch (error) {
         return new NextResponse("Error occured while fetching all Competitions"+error.message,{status:500})
     }
 }
 export const POST=async(req,res)=>{
+    const userId=await verifyJWT(req);
     try {
         const {slug,title}=await req.body;
         if(!slug||!title){
@@ -26,12 +30,13 @@ export const POST=async(req,res)=>{
         if(!newCompetition){
             return new NextResponse("Can't create new Competition",{status:500})
         }
-        return new NextResponse(JSON.stringify({message:"Created Competiton",data:newCompetition}),{status:500})
+        return new NextResponse(JSON.stringify({message:"Created Competiton",data:newCompetition}),{status:200})
     } catch (error) {
         return new NextResponse("Error occured while creating Competitions"+error.message,{status:500})
     }
 }
 export const PATCH=async(req,res)=>{
+    const userId=await verifyJWT(req);
     try {
         const {slug,challenges,participants,about,tagline,startDate,EndDate,keyword}=await req.body;
 
@@ -47,13 +52,14 @@ export const PATCH=async(req,res)=>{
             return  new NextResponse("Competiton not updated.", {status:400})
 
         }
-        return new NextResponse(JSON.stringify({message:"Updated Said Competiton",data:updatedCompetition}),{status:500})
+        return new NextResponse(JSON.stringify({message:"Updated Said Competiton",data:updatedCompetition}),{status:200})
     } catch (error) {
         return new NextResponse("Error occured while updating Competiton"+error.message,{status:500})
     }
 }
 
 export const DELETE=async(req,res)=>{
+    const userId=await verifyJWT(req);
     try {
         const {slug}=await req.body;
 

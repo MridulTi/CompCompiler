@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { hash, compare } from "bcrypt";
+import jwt from "jsonwebtoken"
 const userSchemas = new mongoose.Schema(
   {
     email: {
@@ -46,7 +47,6 @@ userSchemas.pre("save", async function (next) {
 });
 
 userSchemas.methods.isPasswordCorrect = async function (password) {
-  console.log(password);
   return await compare(password, this.password);
 };
 userSchemas.methods.generateAccessToken = async function () {

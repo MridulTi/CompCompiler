@@ -8,7 +8,7 @@ const prizeSchema=new mongoose.Schema({
     secondPlace:{type:String},
     thirdPlace:{type:String}
 })
-export const Prize=mongoose.model("Prize",prizeSchema)
+export const Prize=mongoose.models.Prize || mongoose.model("Prize",prizeSchema)
 
 const compSchema=new mongoose.Schema({
     slug:{

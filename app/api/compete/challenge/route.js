@@ -2,6 +2,7 @@ import Challenge from "@models/challenge.schema.js";
 import { NextResponse } from "next/server"
 
 export const POST=async(req,res)=>{
+    const userId=await verifyJWT(req);
     try {
         const {slug,difficulty,score}=await req.body;
         if (!slig || !difficulty || !score){
@@ -22,6 +23,7 @@ export const POST=async(req,res)=>{
 }
 
 export const PATCH=async(req,res)=>{
+    const userId=await verifyJWT(req);
     try {
         const {slug,title,problemStatement,examples,input,output,testcase,keywords,hints}=await req.body;
 
@@ -44,6 +46,7 @@ export const PATCH=async(req,res)=>{
 }
 
 export const DELETE=async(req,res)=>{
+    const userId=await verifyJWT(req);
     try {
         const {slug}=await req.body;
 
