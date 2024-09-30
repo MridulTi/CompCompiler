@@ -1,6 +1,9 @@
 import { Competition } from "@models/competition.schema";
+import { connectToDB } from "@utils/database";
 import { verifyJWT } from "@utils/verifyjwt";
 import { NextResponse } from "next/server"
+
+await connectToDB();
 
 export const GET=async(req,res)=>{
     const userId=await verifyJWT(req);

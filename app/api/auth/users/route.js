@@ -6,6 +6,7 @@ import { hash, compare } from "bcrypt";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@utils/verifyjwt";
 
+await connectToDB();
 const generateAccessAndRefreshTokens = async (userId) => {
     try {
       const user = await User.findById(userId);
@@ -42,7 +43,6 @@ export const GET = async () => {
 export const POST = async (req) => {
   const { searchParams } = new URL(req.url);
   const action = searchParams.get("action");
-  await connectToDB();
 
   if (action === "register") {
     try {

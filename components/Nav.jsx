@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
-const Nav = () => {
+export const Nav = () => {
   const { data: session } = useSession();
 
   const [providers, setProviders] = useState(null);
@@ -152,4 +152,19 @@ const Nav = () => {
   );
 };
 
-export default Nav;
+export const AuthNav=()=>{
+  return(
+    <nav className='fixed top-0 z-20 flex shadow-md justify-between w-screen bg-white mb-16 py-3 px-12'>
+    <Link href='/' className='flex gap-2 flex-center'>
+      {/* <Image
+        src='/assets/images/logo.svg'
+        alt='logo'
+        width={30}
+        height={30}
+        className='object-contain'
+      /> */}
+      <p className='font-extrabold text-black text-xl'>Compile-<b className="tracking-widest">CLASH</b></p>
+    </Link>
+    </nav>
+  )
+}

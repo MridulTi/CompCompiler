@@ -1,7 +1,9 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Nav from "@components/Nav";
 import Provider from "@components/Provider";
+import { ErrorProvider } from "@context/ErrorContext";
+import { AppProvider } from "@context/AppProviders";
+import { AuthNav } from "@components/Nav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,10 +17,14 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <Provider>
+        <AppProvider>
+          <ErrorProvider>
           <main>
-            <Nav />
+            <AuthNav/>
             {children}
           </main>
+          </ErrorProvider>
+        </AppProvider>
         </Provider>
       </body>
     </html>
