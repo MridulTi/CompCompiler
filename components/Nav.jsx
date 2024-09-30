@@ -25,7 +25,7 @@ const Nav = () => {
   }, []);
 
   return (
-    <nav className='flex justify-between w-screen mb-16 pt-3 px-12'>
+    <nav className='fixed top-0 flex justify-between w-screen mb-16 pt-3 px-12'>
       <Link href='/' className='flex gap-2 flex-center'>
         {/* <Image
           src='/assets/images/logo.svg'
@@ -34,7 +34,7 @@ const Nav = () => {
           height={30}
           className='object-contain'
         /> */}
-        <p className='font-bold text-xl'>CompCompiler</p>
+        <p className='font-extrabold text-white text-xl'>Compile-<b className="tracking-widest">CLASH</b></p>
       </Link>
 
       {/* Desktop Navigation */}
@@ -45,7 +45,7 @@ const Nav = () => {
               Create Post
             </Link>
 
-            <button type='button' onClick={signOut} className='outline outline-1 hover:bg-black hover:text-white outline-black p-2'>
+            <button type='button' onClick={signOut} className='outline outline-1 hover:bg-black hover:text-white outline-black p-2 px-4'>
               Sign Out
             </button>
 
@@ -63,16 +63,26 @@ const Nav = () => {
           <>
             {providers &&
               Object.values(providers).map((provider) => (
+                <div className="flex gap-4 items-center ">
                 <button
                   type='button'
                   key={provider.name}
                   onClick={() => {
                     signIn(provider.id);
                   }}
-                  className='bg-black p-2 text-white'
+                  className='hover:bg-gray-700  p-2 px-6 rounded-lg font-semibold text-white'
                 >
-                  Sign in
+                  Log In
                 </button>
+                <button
+                  type='button'
+                  key={provider.name}
+                  
+                  className='bg-white p-2 hover:bg-black hover:text-white px-6 rounded-lg font-semibold'
+                >
+                  Sign Up
+                </button>
+                </div>
               ))}
           </>
         )}
