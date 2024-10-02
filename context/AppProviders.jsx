@@ -5,6 +5,7 @@ const AppContext=createContext(null);
 
 export function AppProvider({children}) {
     const [AuthPage,setAuthPage]=useState("login");
+    const [userCred,setUserCred]=useState({})
     const [propertyData, setProperty] = useState(null);
     const [searchList,setSearchList]=useState(null);
 
@@ -20,6 +21,10 @@ export function AppProvider({children}) {
         setProperty(data)
     }
 
+    function setupUserCred(data){
+        setUserCred(data)
+    }
+
 
     return(
         <AppContext.Provider value={{
@@ -28,7 +33,9 @@ export function AppProvider({children}) {
             propertyData,
             funcSetProperty,
             searchList,
-            handleSearchList
+            handleSearchList,
+            userCred,
+            setupUserCred
             }}>
            {children}
         </AppContext.Provider>

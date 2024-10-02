@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
+import { useApp } from "@context/AppProviders";
+import { Avatar } from "@material-tailwind/react";
 
 export const Nav = () => {
   const { data: session } = useSession();
@@ -153,6 +155,10 @@ export const Nav = () => {
 };
 
 export const AuthNav=()=>{
+  const {userCred}=useApp();
+  useEffect(()=>{
+    console.log(userCred.photoURL)
+  })
   return(
     <nav className='fixed top-0 z-20 flex shadow-md justify-between w-screen bg-white mb-16 py-3 px-12'>
     <Link href='/' className='flex gap-2 flex-center'>
@@ -165,6 +171,7 @@ export const AuthNav=()=>{
       /> */}
       <p className='font-extrabold text-black text-xl'>Compile-<b className="tracking-widest">CLASH</b></p>
     </Link>
+    {userCred?.photoURL&&<Avatar src={userCred.photoURL} alt="Photo URL" size="sm"/>}
     </nav>
   )
 }

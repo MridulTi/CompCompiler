@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlinePentagon } from "react-icons/md";
 import { LuDivide, LuActivity } from "react-icons/lu";
 import { HiOutlineLightningBolt } from "react-icons/hi";
@@ -9,49 +9,77 @@ import { useApp } from "@context/AppProviders";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useError } from "@context/ErrorContext";
+import { signInWithGithub, signInWithGoogle } from "@utils/helpers";
+import { auth } from "@config/firebase.config";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 export default function Auth() {
-    const {triggerError}=useError();
-  const { AuthPage, toggleAuthPage } = useApp();
+  const {triggerError}=useError();
+  const { AuthPage, toggleAuthPage ,setupUserCred} = useApp();
   const [Form, setForm] = useState({
     email: "",
     username: "",
     password: "",
   });
   const router = useRouter();
+  
+  useEffect(()=>{
+    const unsubscribe=auth.onAuthStateChanged(userCred=>{
+      if(userCred){
+        setupUserCred(userCred)
+        router.push("/participate/")
+      }
+    })
+    return ()=>unsubscribe()
+  },[])
 
   function handleForm(e) {
     setForm({ ...Form, [e.target.name]: e.target.value });
   }
 
-  function handleSignup(e) {
-    e.preventDefault();
-    axios
-      .post("/api/auth/users?action=register", Form)
-      .then((res) => {
-        if (res.status == 201) {
-          toggleAuthPage("login");
-        }
-      })
-      .catch((err) => {
-        triggerError(err)
-      });
-  }
+  // function handleSignup(e) {
+  //   e.preventDefault();
+  //   axios
+  //     .post("/api/auth/users?action=register", Form)
+  //     .then((res) => {
+  //       if (res.status == 201) {
+  //         toggleAuthPage("login");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       triggerError(err)
+  //     });
+  // }
   
-  function handleLogin(e) {
-    e.preventDefault();
-    axios
-      .post("/api/auth/users?action=login", Form)
-      .then((res) => {
-        if (res.status == 200) {
-          console.log(res.data);
-          setForm({ email: "", username: "", password: "" });
-          router.push("/participate");
-        }
+  // function handleLogin(e) {
+  //   e.preventDefault();
+  //   axios
+  //     .post("/api/auth/users?action=login", Form)
+  //     .then((res) => {
+  //       if (res.status == 200) {
+  //         console.log(res.data);
+  //         setForm({ email: "", username: "", password: "" });
+  //         router.push("/participate");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       triggerError(err)
+  //     });
+  // }
+
+  const createNewUser=async()=>{
+    await createUserWithEmailAndPassword(auth,Form.email,Form.password)
+      .then(userCred=>{
+        console.log(userCred);
+        toggleAuthPage("login");
       })
-      .catch((err) => {
-        triggerError(err)
-      });
+      .catch(err=>triggerError(err.message))
+  }
+
+  const loginWithEmailPassword=async()=>{
+    await signInWithEmailAndPassword(auth,Form.email,Form.password)
+      .then(userCred=>console.log(userCred))
+      .catch(err=>triggerError(err.message))
   }
 
   return (
@@ -91,7 +119,7 @@ export default function Auth() {
                   : "Welcome back! Enter your details to login."}
               </Typography>
               <form
-                onSubmit={AuthPage === "register" ? handleSignup : handleLogin}
+                onSubmit={AuthPage === "register" ? createNewUser : loginWithEmailPassword}
                 className="mt-4 mb-2 w-full sm:w-80 lg:w-full max-w-screen-lg"
               >
                 <div className="mb-1 flex flex-col gap-4">
@@ -158,11 +186,19 @@ export default function Auth() {
                 <Button type="submit" className="mt-6" fullWidth>
                   {AuthPage === "register" ? "Sign Up" : "Log In"}
                 </Button>
+               
                 {AuthPage==="register"?(
                 <p className="text-md text-black font-thin text-center py-2">Already have an Account? <b className="font-semibold cursor-pointer" onClick={()=>toggleAuthPage("login")}>Login!</b> </p>
                 ):(<p className="text-md text-black font-thin text-center py-2">Don't have an Account yet? <b onClick={()=>toggleAuthPage("register")} className="font-semibold cursor-pointer">Sign Up!</b> </p>)}
               </form>
+              <Button onClick={signInWithGoogle} type="submit" className="mt-6 bg-gray-700" fullWidth>
+                  Sign In with Google
+            </Button>
+            <Button onClick={signInWithGithub} type="submit" className="mt-6 bg-gray-700" fullWidth>
+                  Sign In with Github
+            </Button>
             </Card>
+            
           </div>
         </div>
       </section>
