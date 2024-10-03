@@ -3,17 +3,17 @@ import { getApps, getApp, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
+
 const firebaseConfig = {
-    apiKey: "AIzaSyA2QjzQ0G0aQoWfhoNY4FMNVs6yyy10iOA",
-    authDomain: "code-compiler-9f51b.firebaseapp.com",
-    projectId: "code-compiler-9f51b",
-    storageBucket: "code-compiler-9f51b.appspot.com",
-    messagingSenderId: "106720276900",
-    appId: "1:106720276900:web:3c3ebb1d70dcc8e09c9131"
+    apiKey:process.env.NEXT_PUBLIC_FIREBASE_APP_API_KEY,
+    authDomain:process.env.NEXT_PUBLIC_FIREBASE_APP_AUTHDOMAIN,
+    projectId:process.env.NEXT_PUBLIC_FIREBASE_APP_PROJECTID,
+    storageBucket:process.env.NEXT_PUBLIC_FIREBASE_APP_STORAGE_BUCKET,
+    messagingSenderId:process.env.NEXT_PUBLIC_FIREBASE_APP_MESSAGE_SENDING_ID,
+    appId:process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 // Initialize Firebase
 const app = getApps.length>0? getApp() : initializeApp(firebaseConfig);
-
 const auth=getAuth(app)
 
 const db=getFirestore(app)
