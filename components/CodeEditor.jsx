@@ -8,7 +8,7 @@ const languages=Object.entries(LANGUAGE_VERSIONS)
 
 function CodeEditor() {
     const [lang,setLang]=useState("javascript")
-    const [value,setValue]=useState("")
+    const [value,setValue]=useState(CODE_SNIPPETS["javascript"])
     const editorRef=useRef();
 
     const onMount=(editor)=>{
@@ -19,7 +19,7 @@ function CodeEditor() {
         <div className='w-full aspect-square p-5'>
             <div className='flex items-center py-2 justify-between'>
             <h1 className='w-full font-bold text-xl'>Code Editor</h1>
-            <Select label="Select Language" onChange={(e)=>{
+            <Select defaultValue={"javascript"} label="Select Language" onChange={(e)=>{
                 setLang(e);
                 setValue(CODE_SNIPPETS[e])
             }}>
@@ -30,7 +30,7 @@ function CodeEditor() {
             </div>
             <div className='w-full h-full'>
                 <Editor
-                    className='w-full'
+                    className='w-full rounded-xl'
                     theme="vs-dark"
                     language={lang}
                     options={{

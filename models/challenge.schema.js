@@ -9,9 +9,9 @@ const challengeSchema=new mongoose.Schema({
     difficulty:{
         type:String,
         required:true,
-        enum:["Easy","Medium","Hard"]
+        enum:["easy","medium","hard"]
     },
-    Score:{
+    score:{
         type:String,
         required:true
     },
@@ -32,6 +32,7 @@ const challengeSchema=new mongoose.Schema({
             Output:{type:String},
         }
     ],
+    compSlug:{type:String,required:true},
     keywords:[
         {
             type:String

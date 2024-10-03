@@ -15,23 +15,13 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "fire
 
 export default function Auth() {
   const {triggerError}=useError();
-  const { AuthPage, toggleAuthPage ,setupUserCred} = useApp();
+  const { AuthPage, toggleAuthPage ,setupUserCred,userCred} = useApp();
   const [Form, setForm] = useState({
     email: "",
     username: "",
     password: "",
   });
-  const router = useRouter();
-  
-  useEffect(()=>{
-    const unsubscribe=auth.onAuthStateChanged(userCred=>{
-      if(userCred){
-        setupUserCred(userCred)
-        router.push("/participate/")
-      }
-    })
-    return ()=>unsubscribe()
-  },[])
+
 
   function handleForm(e) {
     setForm({ ...Form, [e.target.name]: e.target.value });

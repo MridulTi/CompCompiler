@@ -1,22 +1,28 @@
 import Challenge from "@models/challenge.schema.js";
+import { connectToDB } from "@utils/database";
+import { verifyJWT } from "@utils/verifyjwt";
 import { NextResponse } from "next/server"
+
+await connectToDB()
 
 export const POST=async(req,res)=>{
     const userId=await verifyJWT(req);
     try {
-        const {slug,difficulty,score}=await req.body;
-        if (!slig || !difficulty || !score){
+        const {title,difficulty,score}=await req.json();
+        if (!title || !difficulty || !score){
             return new NextResponse("Credentials not given entirely"+error.message,{status:400})
         }
-        const newChallenge=new Challenge.create({
-            slug,
+        const newChallenge=new Challenge({
+            slug:title.toUpperCase().replace(/[\s\-_]/g, ""),
+            title,
             difficulty,
             score
         })
         if (!newChallenge){
             return  new NextResponse("Challenge not created", {status:400})
         }
-        return new NextResponse(JSON.stringify({message:"Created Challenge",data:newChallenge}),{status:500})
+        await newChallenge.save();
+        return new NextResponse(JSON.stringify({message:"Created Challenge",data:newChallenge}),{status:200})
     } catch (error) {
         return new NextResponse("Error occured while creating Challenge"+error.message,{status:500})
     }
