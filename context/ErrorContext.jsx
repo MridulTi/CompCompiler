@@ -39,7 +39,7 @@ export const ErrorProvider = ({ children }) => {
       hostModal ,
       setHostModal,
       addChallenge,
-      setNewAddChallenge
+      setNewAddChallenge,
     }}>
       {children}
     </ErrorContext.Provider>

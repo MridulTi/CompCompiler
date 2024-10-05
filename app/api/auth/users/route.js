@@ -41,61 +41,70 @@ export const GET = async () => {
 
 // User Registration
 export const POST = async (req) => {
-  const { searchParams } = new URL(req.url);
-  const action = searchParams.get("action");
 
-  if (action === "register") {
     try {
-      const { email, username, password } = await req.json();
-      console.log(email);
+      const { email, username,uid,image, password } = await req.json();
+      
+      const newUser=await User.findOne({email:email?.toLowerCase()})
+      if(!newUser){
+        const newUser = new User({ 
+          email:email?.toLowerCase(), 
+          username,
+          uid,
+          image:image || "", 
+          password 
+        });
+        await newUser.save();
+      }
 
-    
-      const newUser = new User({ email:email?.toLowerCase(), username, password });
-      await newUser.save();
-
+      const { accessToken } = await generateAccessAndRefreshTokens(newUser._id);
+      const options = {
+          httpOnly: true,
+          secure: true,
+      };
+      cookies().set("accessToken", accessToken, options)
+      
       return new NextResponse(JSON.stringify({ message: "User is created",data:newUser }),{ status: 200 });
     } catch (error) {
       return new NextResponse("Error Registering user" + error.message, {
         status: 500,
       });
     }
-  } else if (action === "login") {
-    try {
-      const { email, password } = await req.json();
-      const user = await User.findOne({ email:email.toLowerCase() });
+  //   try {
+  //     const { email, password } = await req.json();
+  //     const user = await User.findOne({ email:email.toLowerCase() });
 
-      if (!user) {
-        return new NextResponse(
-          JSON.stringify({ message: "Can't find the said user" }),
-          { status: 400 }
-        );
-      }
-      const isValidPassword = await user.isPasswordCorrect(password);
-      if (!isValidPassword) {
-        return new NextResponse(
-          JSON.stringify({ message: "Incorrect password" }),
-          { status: 400 }
-        );
-      }
+  //     if (!user) {
+  //       return new NextResponse(
+  //         JSON.stringify({ message: "Can't find the said user" }),
+  //         { status: 400 }
+  //       );
+  //     }
+  //     const isValidPassword = await user.isPasswordCorrect(password);
+  //     if (!isValidPassword) {
+  //       return new NextResponse(
+  //         JSON.stringify({ message: "Incorrect password" }),
+  //         { status: 400 }
+  //       );
+  //     }
 
-      const { accessToken } = await generateAccessAndRefreshTokens(
-        user._id
-        );
-        const options = {
-            httpOnly: true,
-            secure: true,
-        };
-        cookies().set("accessToken", accessToken, options)
-      return new NextResponse(
-        JSON.stringify({ message: "User is logged in", data:user}),
-        { status: 200 }
-      );
-    } catch (error) {
-      return new NextResponse("Error Logging User In: " + error.message, {
-        status: 500,
-      });
-    }
-  }
+  //     const { accessToken } = await generateAccessAndRefreshTokens(
+  //       user._id
+  //       );
+  //       const options = {
+  //           httpOnly: true,
+  //           secure: true,
+  //       };
+  //       cookies().set("accessToken", accessToken, options)
+  //     return new NextResponse(
+  //       JSON.stringify({ message: "User is logged in", data:user}),
+  //       { status: 200 }
+  //     );
+  //   } catch (error) {
+  //     return new NextResponse("Error Logging User In: " + error.message, {
+  //       status: 500,
+  //     });
+  // }
 };
 
 // Updating User details

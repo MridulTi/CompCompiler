@@ -3,13 +3,14 @@ const nextConfig = {
     images: {
         domains: ['lh3.googleusercontent.com'],
     },
-    webpack(config){
+    webpack: (config) => {
         config.experiments={
             ...config.experiments,
             topLevelAwait:true
         }
-        return config
-    }
+        config.module.noParse = /@mapbox\/node-pre-gyp/;
+        return config;
+      },
 };
 
 export default nextConfig;

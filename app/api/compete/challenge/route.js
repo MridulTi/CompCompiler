@@ -5,6 +5,26 @@ import { NextResponse } from "next/server"
 
 await connectToDB()
 
+
+export const GET=async(req,res)=>{
+    try {
+        const userId=await verifyJWT(req);
+        const { searchParams } = new URL(req.url);
+        const slug = searchParams.get("slug");
+        if (!slug){
+            return new NextResponse("Credentials not given entirely"+error.message,{status:400})
+        }
+        console.log(slug)
+        const thisChallenge=await Challenge.findOne({slug:slug});
+        if (!thisChallenge) return new NextResponse("Said Challenge Not Found",{status:404})
+        
+        return new NextResponse(JSON.stringify({message:"Fetched current Challenge",data:thisChallenge}),{status:200})
+    } catch (error) {
+        return new NextResponse("Error occured while fetching Challenge"+error.message,{status:500})
+    }
+}
+
+
 export const POST=async(req,res)=>{
     const userId=await verifyJWT(req);
     try {
@@ -54,7 +74,7 @@ export const PATCH=async(req,res)=>{
 export const DELETE=async(req,res)=>{
     const userId=await verifyJWT(req);
     try {
-        const {slug}=await req.body;
+        const {slug}=await req.json();
 
         if (!slug){
             return new NextResponse("Slug not found"+error.message,{status:400})

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { hash, compare } from "bcrypt";
+import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 const userSchemas = new mongoose.Schema(
   {
@@ -16,12 +16,17 @@ const userSchemas = new mongoose.Schema(
         "Username invalid, Only Uppercase, lowercase and numbers are allowed, max. length of 16 characters",
       ],
     },
+    uid:{
+      type:String,
+      required:true
+    },
     password: {
       type: String,
       match: [
         /^(?=.*?[0-9])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^0-9A-Za-z]).{8,32}$/,
         "Password must contain one number,atleast one uppercase and one lowercase letters and one special character, with length of between 8 to 32 long",
       ],
+      default:""
     },
     image: {
       type: String,
@@ -29,25 +34,25 @@ const userSchemas = new mongoose.Schema(
   },
   { timestamps: true }
 );
-userSchemas.pre("save", async function (next) {
-  console.log("Pre save hook triggered");
-  if (!this.isModified("password")) {
-    console.log("Password not modified");
-    return next();
-  }
+// userSchemas.pre("save", async function (next) {
+//   console.log("Pre save hook triggered");
+//   if (!this.isModified("password")) {
+//     console.log("Password not modified");
+//     return next();
+//   }
 
-  try {
-    console.log("Hashing password");
-    this.password = await hash(this.password, 10);
-    next();
-  } catch (error) {
-    console.error("Error hashing password:", error);
-    next(error);
-  }
-});
+//   try {
+//     console.log("Hashing password");
+//     this.password = await bcrypt.hash(this.password, 10);
+//     next();
+//   } catch (error) {
+//     console.error("Error hashing password:", error);
+//     next(error);
+//   }
+// });
 
 userSchemas.methods.isPasswordCorrect = async function (password) {
-  return await compare(password, this.password);
+  return await bcrypt.compare(password, this.password);
 };
 userSchemas.methods.generateAccessToken = async function () {
   return await jwt.sign(

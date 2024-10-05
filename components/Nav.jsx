@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 import { useApp } from "@context/AppProviders";
 import { Avatar, Button, Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
-import { signOutFunction } from "@utils/helpers";
 import { usePathname } from "next/navigation";
 import { useError } from "@context/ErrorContext";
+import { signOutFunction } from "@utils/helpers.js";
 
 export const Nav = () => {
   const { data: session } = useSession();
@@ -199,7 +199,7 @@ export const DashNav=()=>{
           {userCred?.photoURL && <Avatar src={userCred.photoURL} alt="Photo URL" size="sm" />}
         </MenuHandler>
         <MenuList>
-          <MenuItem onClick={signOutFunction} className="bg-red-600 w-full text-center text-white">Log Out</MenuItem>
+          <MenuItem className="bg-red-600 w-full text-center text-white">Log Out</MenuItem>
         </MenuList>
       </Menu>
     </div>

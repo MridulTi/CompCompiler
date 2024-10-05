@@ -9,9 +9,10 @@ import { useApp } from "@context/AppProviders";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useError } from "@context/ErrorContext";
-import { signInWithGithub, signInWithGoogle } from "@utils/helpers";
 import { auth } from "@config/firebase.config";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithGithub, signInWithGoogle } from "@utils/helpers";
+import User from "@models/user.schema";
 
 export default function Auth() {
   const {triggerError}=useError();
@@ -27,40 +28,19 @@ export default function Auth() {
     setForm({ ...Form, [e.target.name]: e.target.value });
   }
 
-  // function handleSignup(e) {
-  //   e.preventDefault();
-  //   axios
-  //     .post("/api/auth/users?action=register", Form)
-  //     .then((res) => {
-  //       if (res.status == 201) {
-  //         toggleAuthPage("login");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       triggerError(err)
-  //     });
-  // }
-  
-  // function handleLogin(e) {
-  //   e.preventDefault();
-  //   axios
-  //     .post("/api/auth/users?action=login", Form)
-  //     .then((res) => {
-  //       if (res.status == 200) {
-  //         console.log(res.data);
-  //         setForm({ email: "", username: "", password: "" });
-  //         router.push("/participate");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       triggerError(err)
-  //     });
-  // }
-
   const createNewUser=async()=>{
     await createUserWithEmailAndPassword(auth,Form.email,Form.password)
       .then(userCred=>{
         console.log(userCred);
+        const Formdata={
+          username:userCred.user.displayName,
+          email:userCred.user.email,
+          image:userCred.user.photoURL,
+          uid:userCred.user.uid,
+        }
+        axios.post("/api/auth/users",Formdata)
+            .then(res=>console.log(res.data.data))
+            .catch(err=>console.log(err))
         toggleAuthPage("login");
       })
       .catch(err=>triggerError(err.message))

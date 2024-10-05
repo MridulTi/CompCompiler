@@ -67,6 +67,7 @@ export const POST = async (req, res) => {
             startDate,
             endDate,
             about,
+            creator:userId,
             compSlug,
             keywords,
         });

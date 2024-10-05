@@ -9,17 +9,20 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 
 export default function layout({children}) {
-  const{error,closeError,hostModal,setHostModal}=useError()
+  const{error,closeError,
+    hostModal,setHostModal  
+  }=useError()
 
   const {setupUserCred,userCred}=useApp();
 
   const router=useRouter();
 
   useEffect(()=>{
+    console.log("Checking Token")
     const unsubscribe=auth.onAuthStateChanged(userCred=>{
       if(userCred){
         setupUserCred(userCred)
-        router.push("/code/participate/")
+        router.push("/code/profile/")
       }else if(userCred===null){
         router.push("/code/authentication/")
       }

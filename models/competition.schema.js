@@ -16,6 +16,10 @@ const compSchema=new mongoose.Schema({
         unique:true,
         required:true,
     },
+    creator:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    },
     challenges:[
         {
             type:mongoose.Schema.Types.ObjectId,

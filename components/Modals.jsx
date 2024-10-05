@@ -163,3 +163,68 @@ export function AddChallengeModal({ open, handleOpen }) {
 
   )
 }
+
+export function HostedCompModal({ open, handleOpen }) {
+  const { challenge} = useError();
+  const router = useRouter();
+  const [Form, setForm] = useState({"compSlug":challenge.slug});
+  function handleForm(e) {
+    setForm({ ...Form, [e.target.name]: e.target.value });
+  }
+  function handleAddChallenge(){
+    console.log(challenge.slug)
+    axios.post("/api/compete/challenge",Form)
+    .then(res=>{
+      console.log(res);
+      router.push(`/code/host-comp/${challenge.slug}/edit/${res.data?.data?.slug}`);
+    })
+    .catch(err=>console.log(err))
+  }
+
+  return (
+    <Dialog
+      size="xs"
+      open={open}
+      handler={handleOpen}
+      className="bg-transparent shadow-none"
+    >
+      <Card className="mx-auto w-full p-5 min-w-11/12">
+        <CardBody className="flex flex-col gap-6">
+          <Typography className="-mt-7 " color="gray" variant="lead">
+            Enter Challenge Details .
+          </Typography>
+          <div className="grid gap-4">
+            <Typography className="-mb-1" color="blue-gray" variant="h6">
+              Challenge Name
+            </Typography>
+            <Input onChange={handleForm} name="title" label="Name" />
+            <Typography className="-mb-1" color="blue-gray" variant="h6">
+              Difficulty
+            </Typography>
+            <Select label="Select Difficulty" name="difficulty" onChange={(e)=>setForm({ ...Form, "difficulty":e })}>
+              <Option value="easy">Easy</Option>
+              <Option value="medium">Medium</Option>
+              <Option value="hard">Hard</Option>
+            </Select>
+            <Typography className="-mb-1" color="blue-gray" variant="h6">
+              Score
+            </Typography>
+            <Input type="number" onChange={handleForm} name="score" label="score" />
+          </div>
+        </CardBody>
+        <CardFooter className="py-0 flex justify-end w-full gap-4">
+          <Button variant="text" color="gray" onClick={handleOpen}>
+            cancel
+          </Button>
+          <Button variant="gradient" color="green" onClick={()=>{
+            handleOpen;
+            handleAddChallenge()
+          }}>
+            Add Challenge
+          </Button>
+        </CardFooter>
+      </Card>
+    </Dialog>
+
+  )
+}
