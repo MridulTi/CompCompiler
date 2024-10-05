@@ -1,13 +1,14 @@
 "use client"
 
 import { Button } from "@chakra-ui/react";
+import { useError } from "@context/ErrorContext";
 import axios from "axios"
 import Link from "next/link";
 import { useEffect, useState } from "react"
 
 const PartipatePage = () => {
   const [comp,setComp]=useState([]);
-
+  const {setHostModal}=useError();
   useEffect(()=>{
       axios.get("/api/compete?query=all")
       .then(res=>{
@@ -24,11 +25,12 @@ const PartipatePage = () => {
               <h1>{data.title}</h1>
             </li></Link>
           ))}
-          <Link href="/code/profile"><Button color="green.400">PROFILE PAGE</Button></Link>
         </div>
       ):(
         <p>Loading...</p>
       )}
+      <Link href="/code/profile"><Button color="green.400">PROFILE PAGE</Button></Link>
+      <Button onClick={setHostModal}>Host A CodeComp</Button>
     </div>
   )
 }

@@ -12,7 +12,6 @@ import { useError } from "@context/ErrorContext";
 import { auth } from "@config/firebase.config";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { signInWithGithub, signInWithGoogle } from "@utils/helpers";
-import User from "@models/user.schema";
 
 export default function Auth() {
   const {triggerError}=useError();

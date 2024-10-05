@@ -55,8 +55,9 @@ export const GET = async (req, res) => {
 }
 export const POST = async (req, res) => {
     const userId = await verifyJWT(req);
+    console.log(userId)
     try {
-        const { title, startDate,compSlug, endDate, about, keywords } = await req.json();
+        const { title, startDate, endDate, about, keywords } = await req.json();
         if (!title) {
             return new NextResponse("Please fill all required fields", { status: 400 })
         }
@@ -68,7 +69,6 @@ export const POST = async (req, res) => {
             endDate,
             about,
             creator:userId,
-            compSlug,
             keywords,
         });
         if (!newCompetition) {

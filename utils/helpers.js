@@ -21,6 +21,7 @@ export const signInWithGoogle = async () => {
         image:result.user.photoURL,
         uid:result.user.uid,
     }
+    console.log("WORKING")
     await axios.post("/api/auth/users",Formdata)
         .then(res=>console.log(res.data.data))
         .catch(err=>console.log(err))

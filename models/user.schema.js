@@ -12,8 +12,8 @@ const userSchemas = new mongoose.Schema(
       type: String,
       required: [true, "Username is required"],
       match: [
-        /^[0-9A-Za-z]{6,16}$/,
-        "Username invalid, Only Uppercase, lowercase and numbers are allowed, max. length of 16 characters",
+        /^[0-9A-Za-z]{6,20}$/,
+        "Username invalid, Only Uppercase, lowercase and numbers are allowed, max. length of 20 characters",
       ],
     },
     uid:{

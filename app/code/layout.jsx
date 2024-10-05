@@ -21,8 +21,9 @@ export default function layout({children}) {
     console.log("Checking Token")
     const unsubscribe=auth.onAuthStateChanged(userCred=>{
       if(userCred){
+        console.log(userCred)
         setupUserCred(userCred)
-        router.push("/code/profile/")
+        router.push("/code/participate/")
       }else if(userCred===null){
         router.push("/code/authentication/")
       }

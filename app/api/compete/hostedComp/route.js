@@ -7,9 +7,8 @@ await connectToDB();
 
 export const GET = async (req, res) => {
     const userId = await verifyJWT(req);
-    console.log(userId)
     try {
-        const allCompetition = await Competition.findOne({creator:userId})
+        const allCompetition = await Competition.find({creator:userId})
         if (!allCompetition) return new NextResponse("Hosted Competition by current user" , { status: 400 });
         return new NextResponse(JSON.stringify({ message: "Fetched Competition hosted by current User", data: allCompetition }), { status: 200 })
 

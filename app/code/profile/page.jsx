@@ -2,6 +2,7 @@
 import { Button } from '@chakra-ui/react'
 import { Card, Typography } from '@material-tailwind/react'
 import axios from 'axios'
+import Link from 'next/link'
 import React from 'react'
 import { useEffect, useState } from 'react'
 
@@ -14,13 +15,15 @@ function Profilepage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [hostedResponse, participatedResponse] = await Promise.all([
-                    axios.get("/api/compete/hostedComp"),
-                    axios.get("/api/compete/participatedComp")
-                ]);
-
-                setHostedComp(hostedResponse.data.data);
-                setParticipatedComp(participatedResponse.data.data);
+                axios.get("/api/compete/hostedComp")
+                .then(res=>{
+                    console.log(res.data.data)
+                    setHostedComp(res.data.data);
+                })
+                axios.get("/api/compete/participatedComp")
+                .then(res=>{
+                    setParticipatedComp(res.data.data);
+                })
 
             } catch (error) {
                 console.error("Error fetching competition data:", error);
@@ -48,32 +51,35 @@ function Profilepage() {
                                         >
                                             {head}
                                         </Typography>
+                                        
                                     </th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
-                            {TABLE_ROWS.map(({ name, job, date }, index) => (
-                                <tr key={name} className="even:bg-blue-gray-50/50">
+                            {hostedComp.map(({title, startDate,slug, endDate }, index) => (
+                                <tr key={index} className="even:bg-blue-gray-50/50">
                                     <td className="p-4">
                                         <Typography variant="small" color="blue-gray" className="font-normal">
-                                            {name}
+                                            {title}
                                         </Typography>
                                     </td>
                                     <td className="p-4">
                                         <Typography variant="small" color="blue-gray" className="font-normal">
-                                            {job}
+                                            {startDate}
                                         </Typography>
                                     </td>
                                     <td className="p-4">
                                         <Typography variant="small" color="blue-gray" className="font-normal">
-                                            {date}
+                                            {endDate||""}
                                         </Typography>
                                     </td>
                                     <td className="p-4">
-                                        <Typography as="a" href="#" variant="small" color="blue-gray" className="font-medium">
-                                            Edit
-                                        </Typography>
+                                        <Link href={`/code/host-comp/${slug}/edit`}>
+                                            <Typography as="a" href="#" variant="small" color="blue-gray" className="font-medium">
+                                                Edit
+                                            </Typography>
+                                        </Link>
                                     </td>
                                 </tr>
                             ))}

@@ -1,8 +1,6 @@
 import User from "@models/user.schema";
 import { connectToDB } from "@utils/database";
 import { NextResponse } from "next/server";
-import { sign } from "jsonwebtoken";
-import { hash, compare } from "bcrypt";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@utils/verifyjwt";
 
@@ -41,31 +39,31 @@ export const GET = async () => {
 
 // User Registration
 export const POST = async (req) => {
-
     try {
       const { email, username,uid,image, password } = await req.json();
-      
-      const newUser=await User.findOne({email:email?.toLowerCase()})
+      console.log(username)
+      let newUser=await User.findOne({email:email?.toLowerCase()})
       if(!newUser){
-        const newUser = new User({ 
-          email:email?.toLowerCase(), 
-          username,
+        console.log("NEW USER")
+        newUser = await User.create({ 
+          email:email, 
+          username:username?.replace(/\s+/g, ""),
           uid,
           image:image || "", 
-          password 
+          password:password || ""
         });
-        await newUser.save();
       }
+      console.log(newUser)
 
       const { accessToken } = await generateAccessAndRefreshTokens(newUser._id);
       const options = {
           httpOnly: true,
           secure: true,
       };
-      cookies().set("accessToken", accessToken, options)
+      cookies().set("accessToken", accessToken, options);
       
       return new NextResponse(JSON.stringify({ message: "User is created",data:newUser }),{ status: 200 });
-    } catch (error) {
+    }catch (error) {
       return new NextResponse("Error Registering user" + error.message, {
         status: 500,
       });
