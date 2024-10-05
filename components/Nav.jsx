@@ -8,6 +8,7 @@ import { Avatar, Button, Menu, MenuHandler, MenuItem, MenuList } from "@material
 import { usePathname } from "next/navigation";
 import { useError } from "@context/ErrorContext";
 import { signOutFunction } from "@utils/helpers.js";
+import { LuUserCircle } from "react-icons/lu";
 
 export const Nav = () => {
   const { data: session } = useSession();
@@ -176,13 +177,10 @@ export const AuthNav=()=>{
 export const DashNav=()=>{
   const {setHostModal}=useError();
   const {userCred}=useApp();
-  useEffect(()=>{
-    console.log(userCred.photoURL)
-  })
   const url=usePathname();
   return(
-    <nav className='fixed top-0 z-20 flex shadow-md justify-between w-screen bg-white mb-16 py-3 px-12'>
-    <Link href='/' className='flex gap-2 flex-center'>
+    <nav className='fixed top-0 z-20 flex shadow-md justify-between items-center w-screen bg-white mb-16 py-3 px-12'>
+    <Link href='/code/participate/' className='flex gap-2 flex-center'>
       {/* <Image
         src='/assets/images/logo.svg'
         alt='logo'
@@ -192,13 +190,16 @@ export const DashNav=()=>{
       /> */}
       <p className='font-extrabold text-black text-xl'>Compile-<b className="tracking-widest">CLASH</b></p>
     </Link>
-    <div className="flex items-center justify-between gap-4">
+    <div className="flex items-center justify-between gap-6">
       {url.includes("host-comp")?(<Link href="/code/participate/"><Button>Join a Comp</Button></Link>):(<Button onClick={setHostModal}>Host A CodeComp</Button>)}
       <Menu>
         <MenuHandler className="cursor-pointer">
-          {userCred?.photoURL && <Avatar src={userCred.photoURL} alt="Photo URL" size="sm" />}
+          {userCred!=undefined?(userCred?.photoURL && <Avatar src={userCred.photoURL} alt="Photo URL" size="sm" />):(
+            <LuUserCircle className="text-5xl text-gray-500" />
+          )}
         </MenuHandler>
-        <MenuList>
+        <MenuList className="flex flex-col gap-2">
+          <Link href="/code/profile" className="outline-0"><MenuItem className="bg-green-300 w-full text-center text-white">My Profile</MenuItem></Link>
           <MenuItem className="bg-red-600 w-full text-center text-white">Log Out</MenuItem>
         </MenuList>
       </Menu>

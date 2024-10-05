@@ -8,7 +8,7 @@ export default function layout({children}) {
   const {addChallenge,setNewAddChallenge}=useError();
   return (
     <>
-      {/* <DashNav/> */}
+      <DashNav/>
       {children}
       {addChallenge&&<AddChallengeModal open={addChallenge} handleOpen={setNewAddChallenge}/>}
     </>

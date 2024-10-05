@@ -10,13 +10,25 @@ import { useEffect, useState } from "react"
 const HostComp = ({ params }) => {
   const {challenge,setCurrentChallenge}=useError();
   const url=usePathname();
+  const router=useRouter();
+  
   useEffect(() => {
-    axios.get(`/api/compete?query=${params.slugs}`)
-      .then(res => {
-        console.log(res.data.data);
-        setCurrentChallenge(res.data.data);
-      })
-      .catch(err => console.log(err))
+    axios.post("/api/compete/check-comp-owner",{"slug":params.slugs})
+    .then(res=>{
+      console.log(res.data.validUser)
+      if(res.data.validUser){
+        axios.get(`/api/compete?query=${params.slugs}`)
+        .then(res => {
+          console.log(res.data.data);
+          setCurrentChallenge(res.data.data);
+        })
+        .catch(err => console.log(err))
+      }else{
+        router.push(`/code/participate/${params.slugs}/`)
+      }
+    })
+    .catch(err=>console.log(err))
+    
   }, [])
   return (
     <div className="pt-16 grid grid-cols-[75%_25%] place-items-start">

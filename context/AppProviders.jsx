@@ -5,7 +5,7 @@ const AppContext=createContext(null);
 
 export function AppProvider({children}) {
     const [AuthPage,setAuthPage]=useState("login");
-    const [userCred,setUserCred]=useState({})
+    const [userCred,setUserCred]=useState(undefined)
     const [propertyData, setProperty] = useState(null);
     const [searchList,setSearchList]=useState(null);
 

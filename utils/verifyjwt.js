@@ -6,9 +6,7 @@ import { NextResponse } from "next/server";
 export const verifyJWT = async(req) => {
     try {
         const token = cookies()?.get("accessToken")?.value || null;
-        console.log(token)
         const decodedToken = verify(token,process.env.ACCESS_TOKEN_SECRET);
-        console.log(decodedToken)
         if (!decodedToken) return new NextResponse("Couln't verify: ", { status: 400 })
         
         const user=await User.findById(decodedToken?._id).select("-password ")   

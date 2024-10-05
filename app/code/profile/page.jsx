@@ -1,5 +1,6 @@
 "use client"
 import { Button } from '@chakra-ui/react'
+import { DashNav } from '@components/Nav'
 import { Card, Typography } from '@material-tailwind/react'
 import axios from 'axios'
 import Link from 'next/link'
@@ -34,6 +35,8 @@ function Profilepage() {
     }, [])
 
     return (
+        <>
+        <DashNav/>
         <div className="pt-16 grid place-items-center">
             <h1 className="font-extrabold text-3xl">PROFILE.</h1>
             <h1 className="font-extrabold text-xl">Hosted Competitions.</h1>
@@ -48,7 +51,7 @@ function Profilepage() {
                                             variant="small"
                                             color="blue-gray"
                                             className="font-normal leading-none opacity-70"
-                                        >
+                                            >
                                             {head}
                                         </Typography>
                                         
@@ -75,7 +78,7 @@ function Profilepage() {
                                         </Typography>
                                     </td>
                                     <td className="p-4">
-                                        <Link href={`/code/host-comp/${slug}/edit`}>
+                                        <Link href={`/code/host-comp/${slug}/`}>
                                             <Typography as="a" href="#" variant="small" color="blue-gray" className="font-medium">
                                                 Edit
                                             </Typography>
@@ -138,6 +141,7 @@ function Profilepage() {
                 <p className="text-lg text-gray-400">No Competitions Found</p>
             )}
         </div>
+        </>
     )
 }
 

@@ -29,8 +29,6 @@ const PartipatePage = () => {
       ):(
         <p>Loading...</p>
       )}
-      <Link href="/code/profile"><Button color="green.400">PROFILE PAGE</Button></Link>
-      <Button onClick={setHostModal}>Host A CodeComp</Button>
     </div>
   )
 }
