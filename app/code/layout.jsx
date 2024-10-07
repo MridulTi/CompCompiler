@@ -13,7 +13,7 @@ export default function layout({children}) {
     hostModal,setHostModal  
   }=useError()
 
-  const {setupUserCred,userCred}=useApp();
+  const {setupUserCred,userCred,dark}=useApp();
 
   const router=useRouter();
 
@@ -31,10 +31,12 @@ export default function layout({children}) {
     return ()=>unsubscribe()
   },[])
   return (
+    <div className={`${dark?"bg-black":"bg-white text-black"}`}>
     <ThemeProvider>
       {children}
       {error&&<ErrorModal message={error} onClose={closeError}/>}
       {hostModal&&<HostingModal open={hostModal} handleOpen={setHostModal}/>}
     </ThemeProvider>
+    </div>
   )
 }

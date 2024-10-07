@@ -8,6 +8,8 @@ export function AppProvider({children}) {
     const [userCred,setUserCred]=useState(undefined)
     const [propertyData, setProperty] = useState(null);
     const [searchList,setSearchList]=useState(null);
+    const [output,setOutput]=useState(null);
+    const [dark,setDark]=useState(false);
 
     function handleSearchList(data){
         setSearchList(data)
@@ -24,6 +26,12 @@ export function AppProvider({children}) {
     function setupUserCred(data){
         setUserCred(data)
     }
+    function setRecentOutput(data){
+        setOutput(data)
+    }
+    function setAllDark(){
+        setDark(!dark)
+    }
 
 
     return(
@@ -35,7 +43,11 @@ export function AppProvider({children}) {
             searchList,
             handleSearchList,
             userCred,
-            setupUserCred
+            setupUserCred,
+            output,
+            setRecentOutput,
+            dark,
+            setAllDark
             }}>
            {children}
         </AppContext.Provider>

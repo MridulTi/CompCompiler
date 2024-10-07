@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@chakra-ui/react";
+import { CardWithLink } from "@components/Card";
 import { useError } from "@context/ErrorContext";
 import axios from "axios"
 import Link from "next/link";
@@ -17,13 +18,14 @@ const PartipatePage = () => {
       .catch(err=>console.log(err))
   },[])
   return (
-    <div className="pt-16">
+    <div className="pt-16 min-h-screen grid place-items-center">
       {comp.length>0?(
-        <div>
+        <div className="w-1/3 h-full grid grid-cols-4 gap-4">
           {comp.map(data=>(
-            <Link href={`/code/participate/${data.slug}`}><li key={data._id}>
-              <h1>{data.title}</h1>
-            </li></Link>
+              <CardWithLink
+              slug={data.slug}
+              {...data}
+              />
           ))}
         </div>
       ):(

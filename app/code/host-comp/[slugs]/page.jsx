@@ -1,5 +1,6 @@
 'use client'
 import { CircularPagination } from "@components/Pagination"
+import { useApp } from "@context/AppProviders"
 import { useError } from "@context/ErrorContext"
 import { Button } from "@material-tailwind/react"
 import axios from "axios"
@@ -11,6 +12,7 @@ const HostComp = ({ params }) => {
   const {challenge,setCurrentChallenge}=useError();
   const url=usePathname();
   const router=useRouter();
+  const {dark}=useApp();
   
   useEffect(() => {
     axios.post("/api/compete/check-comp-owner",{"slug":params.slugs})
@@ -44,13 +46,13 @@ const HostComp = ({ params }) => {
           <div className="w-10/12 border-2 min-h-[75vh] p-5">
             {challenge?.challenges?.length > 0 ? (challenge?.challenges.map((data) => {
                 return(
-                  <Link href={`${url}/edit/${data.slug}`}><li className='list-none p-5 bg-gray-100 rounded-xl'>
+                  <Link href={`${url}/edit/${data.slug}`} ><li className={`list-none p-5 ${dark?"bg-gray-100":"bg-gray-50"} rounded-xl`}>
                     <h1 className='font-bold text-lg'>{data?.title}</h1>
                     <h1 className='font-bold text-md'>{data?.score}</h1>
                     <h1 className='font-bold text-green-600 text-md'>{data?.difficulty}</h1>
                   </li></Link>
                 )
-              })) : (<p className="text-gray-500">No Challeges Found</p>)}
+              })) : (<p className="text-gray-500 dark:text-gray-300">No Challeges Found</p>)}
           </div>
           <CircularPagination />
         </div>

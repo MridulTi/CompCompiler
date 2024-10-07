@@ -9,6 +9,8 @@ import { usePathname } from "next/navigation";
 import { useError } from "@context/ErrorContext";
 import { signOutFunction } from "@utils/helpers.js";
 import { LuUserCircle } from "react-icons/lu";
+import { DarkMode, FormControl, FormLabel, Switch } from "@chakra-ui/react";
+import { MdDarkMode, MdLightMode, MdModeNight } from "react-icons/md";
 
 export const Nav = () => {
   const { data: session } = useSession();
@@ -176,10 +178,16 @@ export const AuthNav=()=>{
 
 export const DashNav=()=>{
   const {setHostModal}=useError();
-  const {userCred}=useApp();
+  const {userCred,dark,setAllDark}=useApp();
   const url=usePathname();
+
+  function handleThemeToggle(){
+    setAllDark();
+    console.log(dark)
+    document.body.classList.toggle("dark")
+  }
   return(
-    <nav className='fixed top-0 z-20 flex shadow-md justify-between items-center w-screen bg-white mb-16 py-3 px-12'>
+    <nav className={`fixed top-0 z-20 flex shadow-md justify-between items-center w-screen bg-white dark:bg-gray-900 dark:text-white mb-16 py-3 px-12`}>
     <Link href='/code/participate/' className='flex gap-2 flex-center'>
       {/* <Image
         src='/assets/images/logo.svg'
@@ -188,17 +196,22 @@ export const DashNav=()=>{
         height={30}
         className='object-contain'
       /> */}
-      <p className='font-extrabold text-black text-xl'>Compile-<b className="tracking-widest">CLASH</b></p>
+      <p className='font-extrabold text-xl'>Compile-<b className="tracking-widest">CLASH</b></p>
     </Link>
     <div className="flex items-center justify-between gap-6">
-      {url.includes("host-comp")?(<Link href="/code/participate/"><Button>Join a Comp</Button></Link>):(<Button onClick={setHostModal}>Host A CodeComp</Button>)}
+      <form className="my-0 h-fit flex gap-2 items-center">
+        <MdLightMode className="text-gray-500 text-xl"/>
+        <Switch onChange={handleThemeToggle} size='sm' id='email-alerts' />
+        <MdDarkMode className="text-xl"/>
+      </form>
+      {url.includes("host-comp")?(<Link href="/code/participate/"><Button  className="dark:bg-gray-700">Join a Comp</Button></Link>):(<Button className="dark:bg-gray-700" onClick={setHostModal}>Host A CodeComp</Button>)}
       <Menu>
         <MenuHandler className="cursor-pointer">
           {userCred!=undefined?(userCred?.photoURL && <Avatar src={userCred.photoURL} alt="Photo URL" size="sm" />):(
             <LuUserCircle className="text-5xl text-gray-500" />
           )}
         </MenuHandler>
-        <MenuList className="flex flex-col gap-2">
+        <MenuList className="flex flex-col gap-2 outline-0 border-0 dark:bg-gray-900">
           <Link href="/code/profile" className="outline-0"><MenuItem className="bg-green-300 w-full text-center text-white">My Profile</MenuItem></Link>
           <MenuItem className="bg-red-600 w-full text-center text-white">Log Out</MenuItem>
         </MenuList>

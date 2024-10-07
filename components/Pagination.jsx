@@ -2,14 +2,16 @@
 import React from "react";
 import { Button, IconButton } from "@material-tailwind/react";
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
+import { useApp } from "@context/AppProviders";
  
 export function CircularPagination() {
   const [active, setActive] = React.useState(1);
+  const {dark}=useApp();
  
   const getItemProps = (index) =>
     ({
       variant: active === index ? "filled" : "text",
-      color: "gray",
+      color: dark?"white":"gray",
       onClick: () => setActive(index),
       className: "rounded-full",
     });
@@ -27,10 +29,10 @@ export function CircularPagination() {
   };
  
   return (
-    <div className="flex items-center gap-4 my-4">
+    <div className=" flex items-center gap-4 my-4">
       <Button
         variant="text"
-        className="flex items-center gap-2 rounded-full"
+        className="flex items-center gap-2 dark:text-gray-500 rounded-full"
         onClick={prev}
         disabled={active === 1}
       >
@@ -45,7 +47,7 @@ export function CircularPagination() {
       </div>
       <Button
         variant="text"
-        className="flex items-center gap-2 rounded-full"
+        className="flex items-center dark:text-gray-500 gap-2 rounded-full"
         onClick={next}
         disabled={active === 5}
       >
