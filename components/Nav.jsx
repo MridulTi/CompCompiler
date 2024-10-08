@@ -182,7 +182,8 @@ export const DashNav=()=>{
   const url=usePathname();
 
   function handleThemeToggle(){
-    setAllDark();
+    if(dark===true) setAllDark(false);
+    else setAllDark(true)
     console.log(dark)
     document.body.classList.toggle("dark")
   }

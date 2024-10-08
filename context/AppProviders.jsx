@@ -29,8 +29,8 @@ export function AppProvider({children}) {
     function setRecentOutput(data){
         setOutput(data)
     }
-    function setAllDark(){
-        setDark(!dark)
+    function setAllDark(data){
+        setDark(data)
     }
 
 

@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { MdOutlinePentagon } from "react-icons/md";
 import { LuDivide, LuActivity } from "react-icons/lu";
 import { HiOutlineLightningBolt } from "react-icons/hi";
-import { AiOutlineLike } from "react-icons/ai";
-import { Button, Card, Checkbox, Input, Typography } from "@material-tailwind/react";
+import { AiFillGoogleCircle, AiOutlineGoogle, AiOutlineLike } from "react-icons/ai";
+import { Card, Checkbox, Input, Typography } from "@material-tailwind/react";
 import { useApp } from "@context/AppProviders";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -12,6 +12,9 @@ import { useError } from "@context/ErrorContext";
 import { auth } from "@config/firebase.config";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { signInWithGithub, signInWithGoogle } from "@utils/helpers";
+import { Button } from "@chakra-ui/react";
+import { ArrowLeft } from "lucide-react";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 export default function Auth() {
   const {triggerError}=useError();
@@ -56,21 +59,22 @@ export default function Auth() {
       <section className="w-full h-auto min-h-screen grid place-items-center p-4 md:p-0">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 place-items-center w-full max-w-7xl">
           <div className="w-full h-full lg:w-4/6 text-center lg:text-left">
+          <Button className="flex gap-2 mb-12" color="green.400"><ArrowLeft/>Back to Compile-CLASH</Button>
             <h1 className="font-extrabold text-4xl lg:text-6xl"> 
               {AuthPage === "register" ? "Create an account" : "Welcome Back!"}
             </h1>
             <ul className="text-lg lg:text-2xl grid gap-4 pt-4">
               <li className="flex items-center justify-center lg:justify-start gap-2">
-                <MdOutlinePentagon className="text-blue-600" /> Buy and Sell Properties to reliable users.
+                <MdOutlinePentagon className="text-blue-600" /> Host and Participate in coding competitions.
               </li>
               <li className="flex items-center justify-center lg:justify-start gap-2">
                 <HiOutlineLightningBolt className="text-blue-600" /> Fast transfers.
               </li>
               <li className="flex items-center justify-center lg:justify-start gap-2">
-                <LuDivide className="text-blue-600" /> Fast commissions.
+                <LuDivide className="text-blue-600" /> Fast networks.
               </li>
               <li className="flex items-center justify-center lg:justify-start gap-2">
-                <LuActivity className="text-blue-600" /> Best available rates.
+                <LuActivity className="text-blue-600" /> Best available questions.
               </li>
               <li className="flex items-center justify-center lg:justify-start gap-2">
                 <AiOutlineLike className="text-blue-600" /> Convenience.
@@ -152,7 +156,7 @@ export default function Auth() {
                     containerProps={{ className: "-ml-2.5" }}
                   />
                 )}
-                <Button type="submit" className="mt-6" fullWidth>
+                <Button type="submit" className="mt-6 w-full" fullWidth>
                   {AuthPage === "register" ? "Sign Up" : "Log In"}
                 </Button>
                
@@ -160,11 +164,11 @@ export default function Auth() {
                 <p className="text-md text-black font-thin text-center py-2">Already have an Account? <b className="font-semibold cursor-pointer" onClick={()=>toggleAuthPage("login")}>Login!</b> </p>
                 ):(<p className="text-md text-black font-thin text-center py-2">Don't have an Account yet? <b onClick={()=>toggleAuthPage("register")} className="font-semibold cursor-pointer">Sign Up!</b> </p>)}
               </form>
-              <Button onClick={signInWithGoogle} type="submit" className="mt-6 bg-gray-700" fullWidth>
-                  Sign In with Google
+              <Button onClick={signInWithGoogle}className="mt-6 flex gap-2 w-full bg-gray-700" fullWidth>
+                <AiOutlineGoogle className="text-green-500 text-xl"/>  Sign In with Google
             </Button>
-            <Button onClick={signInWithGithub} type="submit" className="mt-6 bg-gray-700" fullWidth>
-                  Sign In with Github
+            <Button onClick={signInWithGithub}className="mt-6 flex gap-2 w-full bg-gray-700" fullWidth>
+            <GitHubLogoIcon className="text-green-500 text-xl"/>  Sign In with Github
             </Button>
             </Card>
             

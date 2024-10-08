@@ -37,7 +37,7 @@ function Profilepage() {
     return (
         <>
         <DashNav/>
-        <div className="pt-16 grid place-items-center">
+        <div className="pt-20 gap-10 dark:text-white min-h-screen flex flex-col justify-start items-start px-64">
             <h1 className="font-extrabold text-3xl">PROFILE.</h1>
             <h1 className="font-extrabold text-xl">Hosted Competitions.</h1>
             {hostedComp != undefined ?
